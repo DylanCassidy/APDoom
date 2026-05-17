@@ -132,6 +132,9 @@
 #define GOTSHOTGUN	"You got the shotgun!"
 #define GOTSHOTGUN2	"You got the super shotgun!"
 
+#define GOTARCHVILETRAP "A lone Archvile wanders in"
+#define GOTREVENANTTRAP "A gang of Revenants are looming around"
+
 // [NS] Beta pickups.
 #define BETA_BONUS3	"Picked up an evil sceptre."
 #define BETA_BONUS4	"Picked up an unholy bible."

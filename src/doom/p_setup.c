@@ -50,6 +50,7 @@
 
 #include "apdoom.h"
 #include "ap_basic.h"
+#include "d_trap.h"
 
 void	P_SpawnMapThing (mapthing_t*	mthing, int index);
 
@@ -703,6 +704,8 @@ void P_LoadThings (int lump)
             playerstartsingame[i] = false;
         }
     }
+
+    SetupTrapData();
 
     W_ReleaseLumpNum(lump);
     free(remapped_things);
