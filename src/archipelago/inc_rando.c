@@ -158,6 +158,18 @@ typedef struct
 static randodef_t monster_rando = {P_TestFit};
 static randodef_t pickup_rando = {NULL};
 
+static const char* RDef_GetGroup(randoitem_t *item)
+{
+    switch (item->group)
+    {
+    case RGROUP_SMALL:  return "small";
+    case RGROUP_MEDIUM: return "medium";
+    case RGROUP_BIG:    return "big";
+    case RGROUP_BOSS:   return "boss";
+    default:            return "unknown";
+    }
+}
+
 static void RDef_Init(randodef_t *rdef, ap_itemrando_t *apinfo)
 {
     for (int i = 0; i < NUM_RGROUPS; ++i)
@@ -321,14 +333,21 @@ void P_PrepareMapThingRandos(void)
         W_ReleaseLumpNum(lump);
     }
 
-#ifdef MTRAND_DEBUG
-    printf("Monster count:\n");
-    for (int i = 0; i < monster_rando.item_count; ++i)
-        printf("  %-5i: %i\n", monster_rando.items[i].doom_type, monster_rando.items[i].frequency);
-    printf("Pickup count:\n");
-    for (int i = 0; i < pickup_rando.item_count; ++i)
-        printf("  %-5i: %i\n", pickup_rando.items[i].doom_type, pickup_rando.items[i].frequency);
-#endif
+    if (ap_debug_mode)
+    {
+        printf("  Monster count:\n");
+        for (int i = 0; i < monster_rando.item_count; ++i)
+            printf("    (%s) %-5i= %i\n",
+                   RDef_GetGroup(&monster_rando.items[i]),
+                   monster_rando.items[i].doom_type,
+                   monster_rando.items[i].frequency);
+        printf("  Pickup count:\n");
+        for (int i = 0; i < pickup_rando.item_count; ++i)
+            printf("    (%s) %-5i= %i\n",
+                   RDef_GetGroup(&pickup_rando.items[i]),
+                   pickup_rando.items[i].doom_type,
+                   pickup_rando.items[i].frequency);
+    }
 }
 
 
