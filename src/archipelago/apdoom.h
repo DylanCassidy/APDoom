@@ -36,6 +36,16 @@ extern "C"
 #define AP_CHECK_MAX 999 // 999 is enforced by ID format
 #define AP_MAX_THING 10240 // List is dynamically allocated; this is more to guard against malformed defs
 
+typedef enum
+{
+    MSGFILTER_NONE,
+    MSGFILTER_JOINPART,
+    MSGFILTER_TAGCHANGE,
+    MSGFILTER_TUTORIAL,
+    MSGFILTER_PLAYERCHAT,
+    MSGFILTER_SERVERCHAT
+} ap_messagefilter_t;
+
 typedef struct
 {
     int doom_type;
@@ -144,7 +154,7 @@ typedef struct
     const char* game;
     const char* player_name;
     const char* passwd;
-    void (*message_callback)(const char*);
+    void (*message_callback)(const char*, ap_messagefilter_t);
     void (*victory_callback)(void);
     int (*give_item_callback)(int doom_type, int ep, int map);
 

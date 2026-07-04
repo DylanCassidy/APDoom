@@ -2692,6 +2692,24 @@ static default_t extra_defaults_list[] =
 
     CONFIG_VARIABLE_INT(apdoom_ap_levelselectorder),
 
+    //!
+    // [AP] Filter out join / part / tags messages.
+    //
+
+    CONFIG_VARIABLE_INT(apdoom_ap_filterjoinpart),
+
+    //!
+    // [AP] Filter out tutorial messages.
+    //
+
+    CONFIG_VARIABLE_INT(apdoom_ap_filtertutorial),
+
+    //!
+    // [AP] Filter out player chat messages.
+    //
+
+    CONFIG_VARIABLE_INT(apdoom_ap_filterchat),
+
 };
 
 static default_collection_t extra_defaults =

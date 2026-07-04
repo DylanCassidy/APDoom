@@ -38,8 +38,15 @@ void tick_sticky_msgs(void)
 // Callback function for "ap_settings.message_callback"
 // Should add the message to the HUD's message queue.
 
-void APC_OnMessage(const char* text)
+void APC_OnMessage(const char* text, ap_messagefilter_t filter)
 {
+    if (crispy->ap_filterjoinpart && (filter == MSGFILTER_JOINPART || filter == MSGFILTER_TAGCHANGE))
+        return;
+    if (crispy->ap_filtertutorial && (filter == MSGFILTER_TUTORIAL))
+        return;
+    if (crispy->ap_filterchat && (filter == MSGFILTER_PLAYERCHAT))
+        return;
+
     HU_AddAPMessage(text); // This string is cached for several seconds
     S_StartSound(NULL, sfx_chat);
 }

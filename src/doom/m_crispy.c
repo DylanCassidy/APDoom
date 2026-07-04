@@ -111,6 +111,12 @@ multiitem_t multiitem_ap_levelselectorder[NUM_AP_LEVELSELECTORDER] =
     {AP_LEVELSELECTORDER_MAP_ORDER_AUTO, "map order (auto)"}
 };
 
+multiitem_t multiitem_ap_filters[] =
+{
+    {0, "show"},
+    {1, "hide"}
+};
+
 multiitem_t multiitem_demotimerdir[] =
 {
     {0, "none"},
@@ -338,6 +344,24 @@ void M_CrispyToggleAPLevelSelectMusic(int choice)
 void M_CrispyToggleAPLevelSelectOrder(int choice)
 {
     ChangeSettingEnum(&crispy->ap_levelselectorder, choice, NUM_AP_LEVELSELECTORDER);
+}
+
+void M_CrispyToggleAPFilterJoinPart(int choice)
+{
+    choice = 0;
+    crispy->ap_filterjoinpart = !crispy->ap_filterjoinpart;
+}
+
+void M_CrispyToggleAPFilterTutorial(int choice)
+{
+    choice = 0;
+    crispy->ap_filtertutorial = !crispy->ap_filtertutorial;
+}
+
+void M_CrispyToggleAPFilterChat(int choice)
+{
+    choice = 0;
+    crispy->ap_filterchat = !crispy->ap_filterchat;
 }
 
 void M_CrispyToggleDemoTimerDir(int choice)

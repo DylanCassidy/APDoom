@@ -44,6 +44,7 @@
 #include <fstream>
 #include <sstream>
 #include <set>
+#include <utility>
 
 #include "local.hpp"
 #include "apzip.h"
@@ -100,7 +101,7 @@ static bool ap_was_connected = false; // Got connected at least once. That means
 static std::set<int64_t> ap_progressive_locations;
 static std::set<int64_t> suppressed_locations; // Locations that don't exist in current multiworld (checksanity, etc)
 static bool ap_initialized = false;
-static std::vector<std::string> ap_cached_messages;
+static std::vector<std::pair<std::string, ap_messagefilter_t>> ap_cached_messages;
 static std::string ap_seed_string;
 static std::vector<ap_notification_icon_t> ap_notification_icons;
 static bool ap_items_synced = false;
@@ -1817,7 +1818,7 @@ void apdoom_send_message(const char* msg)
 	{
 		// Fake "send" the message
 		std::string colored_msg = "~2" + std::string(ap_settings.player_name) + ": " + msg;
-		ap_settings.message_callback(colored_msg.c_str());
+		ap_settings.message_callback(colored_msg.c_str(), ap_messagefilter_t::MSGFILTER_PLAYERCHAT);
 		return;
 	}
 	Json::Value say_packet;
@@ -1886,7 +1887,7 @@ void apdoom_update()
 		if (!ap_cached_messages.empty())
 		{
 			for (const auto& cached_msg : ap_cached_messages)
-				ap_settings.message_callback(cached_msg.c_str());
+				ap_settings.message_callback(cached_msg.first.c_str(), cached_msg.second);
 			ap_cached_messages.clear();
 		}
 	}
@@ -1896,6 +1897,7 @@ void apdoom_update()
 		AP_Message* msg = AP_GetLatestMessage();
 
 		std::string colored_msg;
+		ap_messagefilter_t filtertype = ap_messagefilter_t::MSGFILTER_NONE;
 
 		switch (msg->type)
 		{
@@ -1933,6 +1935,16 @@ void apdoom_update()
 			}
 			default:
 			{
+				if (msg->printType == "Join" || msg->printType == "Part")
+					filtertype = ap_messagefilter_t::MSGFILTER_JOINPART;
+				else if (msg->printType == "TagsChanged")
+					filtertype = ap_messagefilter_t::MSGFILTER_TAGCHANGE;
+				else if (msg->printType == "Tutorial")
+					filtertype = ap_messagefilter_t::MSGFILTER_TUTORIAL;
+				else if (msg->printType == "Chat")
+					filtertype = ap_messagefilter_t::MSGFILTER_PLAYERCHAT;
+				else if (msg->printType == "ServerChat")
+					filtertype = ap_messagefilter_t::MSGFILTER_SERVERCHAT;
 				colored_msg = "~2" + msg->text;
 				break;
 			}
@@ -1943,9 +1955,9 @@ void apdoom_update()
 		if (!colored_msg.empty())
 		{
 			if (ap_initialized)
-				ap_settings.message_callback(colored_msg.c_str());
+				ap_settings.message_callback(colored_msg.c_str(), filtertype);
 			else
-				ap_cached_messages.push_back(colored_msg);
+				ap_cached_messages.push_back({colored_msg, filtertype});
 		}
 
 		AP_ClearLatestMessage();
@@ -2050,7 +2062,7 @@ static void ap_fake_item_msg(int item_id, const char *sender)
 	printf("APDOOM: %s\n", msg.c_str());
 
 	std::string colored_msg = std::string("~2Received ~9") + it->second.name + "~2 from ~4" + sender;
-	ap_settings.message_callback(colored_msg.c_str());
+	ap_settings.message_callback(colored_msg.c_str(), ap_messagefilter_t::MSGFILTER_NONE);
 }
 
 // ----------------------------------------------------------------------------

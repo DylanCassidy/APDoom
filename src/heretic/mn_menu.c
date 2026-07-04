@@ -167,6 +167,9 @@ static boolean CrispyVsync(int option);
 static boolean CrispyAPAutomapIcons(int option);
 static boolean CrispyAPLevelSelectMusic(int option);
 static boolean CrispyAPLevelSelectOrder(int option);
+static boolean CrispyAPFilterJoinPart(int option);
+static boolean CrispyAPFilterTutorial(int option);
+static boolean CrispyAPFilterChat(int option);
 static boolean CrispyNextPage(int option);
 static boolean CrispyPrevPage(int option);
 static void DrawMainMenu(void);
@@ -488,9 +491,9 @@ static MenuItem_t Crispness4Items[] = {
     {ITT_LRFUNC2, "LEVEL ORDERING:", CrispyAPLevelSelectOrder, 0, MENU_NONE},
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
-    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
-    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
-    {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
+    {ITT_LRFUNC2, "JOIN / LEAVE MESSAGES:", CrispyAPFilterJoinPart, 0, MENU_NONE},
+    {ITT_LRFUNC2, "TUTORIAL MESSAGES:", CrispyAPFilterTutorial, 0, MENU_NONE},
+    {ITT_LRFUNC2, "PLAYER CHAT MESSAGES:", CrispyAPFilterChat, 0, MENU_NONE},
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
     {ITT_EMPTY, NULL, NULL, 0, MENU_NONE},
@@ -639,6 +642,13 @@ static const multiitem_t multiitem_ap_levelselectorder[NUM_AP_LEVELSELECTORDER] 
     {AP_LEVELSELECTORDER_MAP_ORDER_DOWN, "map order (down)"},
     {AP_LEVELSELECTORDER_MAP_ORDER_AUTO, "map order (auto)"}
 };
+
+static const multiitem_t multiitem_ap_filters[] =
+{
+    {0, "show"},
+    {1, "hide"}
+};
+
 
 static Menu_t *Menus[] = {
     &MainMenu,
@@ -2176,6 +2186,24 @@ static boolean CrispyAPLevelSelectOrder(int option)
     return true;
 }
 
+static boolean CrispyAPFilterJoinPart(int option)
+{
+    crispy->ap_filterjoinpart = !crispy->ap_filterjoinpart;
+    return true;
+}
+
+static boolean CrispyAPFilterTutorial(int option)
+{
+    crispy->ap_filtertutorial = !crispy->ap_filtertutorial;
+    return true;
+}
+
+static boolean CrispyAPFilterChat(int option)
+{
+    crispy->ap_filterchat = !crispy->ap_filterchat;
+    return true;
+}
+
 static boolean CrispyBobfactor(int option)
 {
     ChangeSettingEnum(&crispy->bobfactor, option, NUM_BOBFACTORS);
@@ -3583,4 +3611,15 @@ static void DrawCrispness4(void)
 
     // Order to move around the level select map
     DrawCrispnessMultiItem(crispy->ap_levelselectorder, 175, 55, multiitem_ap_levelselectorder, false);
+
+    DrawCrispnessSubheader("FILTER MESSAGES", 75);
+
+    // Whether to filter out join / leave messages from text log
+    DrawCrispnessMultiItem(crispy->ap_filterjoinpart, 224, 85, multiitem_ap_filters, false);
+
+    // Whether to filter out tutorial messages from text log
+    DrawCrispnessMultiItem(crispy->ap_filtertutorial, 200, 95, multiitem_ap_filters, false);
+
+    // Whether to filter out player chat messages from text log
+    DrawCrispnessMultiItem(crispy->ap_filterchat, 226, 105, multiitem_ap_filters, false);
 }

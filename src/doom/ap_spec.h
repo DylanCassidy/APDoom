@@ -22,7 +22,7 @@
 #include "doomtype.h"
 
 // Callback functions
-void APC_OnMessage(const char *text);
+void APC_OnMessage(const char *text, ap_messagefilter_t filter);
 void APC_OnVictory(void);
 int APC_OnGiveItem(int doom_type, int ep, int map);
 

@@ -701,6 +701,12 @@ enum
     crispness_ap_levelselectorder,
     crispness_sep_ap_,
 
+    crispness_sep_apmsg,
+    crispness_ap_filterjoinpart,
+    crispness_ap_filtertutorial,
+    crispness_ap_filterchat,
+    crispness_sep_apmsg_,
+
     crispness4_next,
     crispness4_prev,
     crispness4_end
@@ -727,6 +733,11 @@ static menuitem_t Crispness4Menu[]=
     {3,"",	M_CrispyToggleAPAutomapIcons,'a'},
     {3,"",	M_CrispyToggleAPLevelSelectMusic,'l'},
     {3,"",  M_CrispyToggleAPLevelSelectOrder,'l'},
+    {-1,"",0,'\0'},
+    {-1,"",0,'\0'},
+    {3,"",  M_CrispyToggleAPFilterJoinPart,'j'},
+    {3,"",  M_CrispyToggleAPFilterTutorial,'t'},
+    {3,"",  M_CrispyToggleAPFilterChat,'p'},
     {-1,"",0,'\0'},
     {1,"",	M_CrispnessNext,'n'},
     {1,"",	M_CrispnessPrev,'p'},
@@ -1779,6 +1790,11 @@ static void M_DrawCrispness4(void)
     M_DrawCrispnessMultiItem(crispness_ap_automapicons, "Automap AP Icons", multiitem_ap_automapicons, crispy->ap_automapicons, true);
     M_DrawCrispnessItem(crispness_ap_levelselectmusic, "Level Select Music", crispy->ap_levelselectmusic, true);
     M_DrawCrispnessMultiItem(crispness_ap_levelselectorder, "Level Ordering", multiitem_ap_levelselectorder, crispy->ap_levelselectorder, true);
+
+    M_DrawCrispnessSeparator(crispness_sep_apmsg, "Filter Messages");
+    M_DrawCrispnessMultiItem(crispness_ap_filterjoinpart, "Join / Leave Messages", multiitem_ap_filters, crispy->ap_filterjoinpart, true);
+    M_DrawCrispnessMultiItem(crispness_ap_filtertutorial, "Tutorial Messages", multiitem_ap_filters, crispy->ap_filtertutorial, true);
+    M_DrawCrispnessMultiItem(crispness_ap_filterchat, "Player Chat Messages", multiitem_ap_filters, crispy->ap_filterchat, true);
 
     M_DrawCrispnessGoto(crispness4_next, "First Page >");
     M_DrawCrispnessGoto(crispness4_prev, "< Prev Page");

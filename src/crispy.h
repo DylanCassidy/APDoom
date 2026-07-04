@@ -91,6 +91,9 @@ typedef struct
 	int ap_automapicons;
 	int ap_levelselectmusic;
 	int ap_levelselectorder;
+	int ap_filterjoinpart;
+	int ap_filtertutorial;
+	int ap_filterchat;
 	int shadowhud;
 
 	// [crispy] in-game switches and variables
