@@ -185,10 +185,10 @@ static bool TestIWAD(const char *iwad, char **error_str)
     if (!iwad_path)
     {
         const char *descriptive_text = "";
-        if (!strcmp(iwad, "DOOM.WAD")
-            || !strcmp(iwad, "DOOM2.WAD")
-            || !strcmp(iwad, "TNT.WAD")
-            || !strcmp(iwad, "PLUTONIA.WAD"))
+        if (!strcasecmp(iwad, "DOOM.WAD")
+            || !strcasecmp(iwad, "DOOM2.WAD")
+            || !strcasecmp(iwad, "TNT.WAD")
+            || !strcasecmp(iwad, "PLUTONIA.WAD"))
         {
             descriptive_text = "\n\n"
                 "The easiest way to obtain this file is to purchase\xA2 DOOM + DOOM II\xA0 on Steam; "
@@ -197,7 +197,7 @@ static bool TestIWAD(const char *iwad, char **error_str)
                 "If you already own this game, place the IWAD file into the same directory as APDoom. "
                 "For newer rereleases, you want to use the IWAD file that is in the /base/ directory.";
         }
-        else if (!strcmp(iwad, "HERETIC.WAD"))
+        else if (!strcasecmp(iwad, "HERETIC.WAD"))
         {
             descriptive_text = "\n\n"
                 "The easiest way to obtain this file is to purchase\xA2 Heretic + Hexen\xA0 on Steam; "
@@ -242,7 +242,7 @@ static bool TestPWAD(const char **wad_list, char **error_str)
             M_StringConcat(not_found_buf, "\n - ", 1024);
             M_StringConcat(not_found_buf, not_found_list[i], 1024);
 
-            if (!strcmp(not_found_list[i], "nerve.wad"))
+            if (!strcasecmp(not_found_list[i], "nerve.wad"))
             {
                 extra_descriptive_text = "\n\n"
                     "\xA2nerve.wad\xA0 contains the No Rest for the Living levels, and can be found in "
