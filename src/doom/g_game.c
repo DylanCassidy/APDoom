@@ -1499,7 +1499,7 @@ void set_ap_player_states()
     //p->itemcount = ap_state.player_state.item_count;
     //p->secretcount = ap_state.player_state.secret_count;
 
-    if (!was_in_level)
+    if (gamestate == GS_LEVEL && !was_in_level)
     {
         p->pendingweapon = wp_nochange;
         p->readyweapon = (weapontype_t)ap_state.player_state.ready_weapon;
