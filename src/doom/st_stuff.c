@@ -2149,7 +2149,14 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     // status bar background bits
     if (W_CheckNumForName("STBAR") >= 0)
     {
-        callback(DEH_String("STBAR"), &sbar);
+        // [AP] we include a community-made widescreen variant of the doom status bar
+        // but we only want to overwrite specifically the original doom/doom2 version
+        const char *sbarwad = W_WadNameForLump(lumpinfo[W_GetNumForName("STBAR")]);
+        if (!strcasecmp(sbarwad, "DOOM.WAD") || !strcasecmp(sbarwad, "DOOM2.WAD"))
+            callback(DEH_String("STBAR_W"), &sbar);
+        else
+            callback(DEH_String("STBAR"), &sbar);
+
         sbarr = NULL;
     }
     else
