@@ -2086,6 +2086,23 @@ void ST_Drawer (boolean fullscreen, boolean refresh)
     dp_translucent = false;
 }
 
+static boolean ST_unmodifiedStatusBar(void)
+{
+    patch_t *sbarpat = W_CacheLumpNameSafe("STBAR");
+    if (sbarpat->width == 320)
+    {
+	    const char *sbarwad = W_WadNameForLump(lumpinfo[W_GetNumForName("STBAR")]);
+    	return (
+    		strcasecmp(sbarwad, "DOOM.WAD") ||
+    		strcasecmp(sbarwad, "DOOM2.WAD") ||
+    		strcasecmp(sbarwad, "TNT.WAD") ||
+    		strcasecmp(sbarwad, "PLUTONIA.WAD")
+    	);
+    }
+    return false;
+}
+
+
 typedef void (*load_callback_t)(const char *lumpname, patch_t **variable);
 
 // Iterates through all graphics to be loaded or unloaded, along with
@@ -2151,8 +2168,7 @@ static void ST_loadUnloadGraphics(load_callback_t callback)
     {
         // [AP] we include a community-made widescreen variant of the doom status bar
         // but we only want to overwrite specifically the original doom/doom2 version
-        const char *sbarwad = W_WadNameForLump(lumpinfo[W_GetNumForName("STBAR")]);
-        if (!strcasecmp(sbarwad, "DOOM.WAD") || !strcasecmp(sbarwad, "DOOM2.WAD"))
+        if (ST_unmodifiedStatusBar())
             callback(DEH_String("STBAR_W"), &sbar);
         else
             callback(DEH_String("STBAR"), &sbar);
