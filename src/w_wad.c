@@ -730,3 +730,44 @@ void *W_CacheLumpNameSafe(const char *name)
 {
     return W_CacheLumpNumSafe(W_GetNumForName(name));
 }
+
+// [AP] Get a SHA1 hash of a single lump, used to help version files.
+
+#include "sha1.h"
+
+static char lasthash[sizeof(sha1_digest_t) * 2 + 1];
+
+const char *W_HashLumpNum(lumpindex_t lumpnum)
+{
+    byte *data;
+    int data_len;
+    sha1_digest_t hash;
+
+    if (lumpnum >= 0 && (data_len = W_LumpLength(lumpnum)) > 0)
+    {
+        sha1_context_t context;
+
+        data = malloc(data_len);
+        W_ReadLump(lumpnum, data);
+
+        SHA1_Init(&context);
+        SHA1_Update(&context, data, data_len);
+        SHA1_Final(hash, &context);
+
+        free(data);
+    }
+    else
+        memset(hash, 0, sizeof(sha1_digest_t));
+
+    for (int i = 0; i < sizeof(sha1_digest_t); ++i)
+    {
+        M_snprintf(lasthash + i * 2, sizeof(lasthash) - i * 2,
+                   "%02x", hash[i]);
+    }
+    return lasthash;
+}
+
+const char *W_HashLumpName(const char *name)
+{
+    return W_HashLumpNum(W_CheckNumForName(name));
+}
