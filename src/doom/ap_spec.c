@@ -32,6 +32,7 @@
 
 #include "apdoom.h"
 #include "ap_spec.h"
+#include "d_trap.h"
 
 // Run every gametic, should call a function to update message state.
 
@@ -328,6 +329,27 @@ int APC_OnGiveItem(int doom_type, int ep, int map)
         case 17: // Energy cell pack
             P_GiveAmmo (player, am_cell, clip_size,false);
             player->message = DEH_String(GOTCELLBOX);
+            break;
+
+        // Traps
+        case 65900: // Archvile Trap
+            if (gamemode != commercial)
+                return false;
+            ActivateSpawnTrap(doom_type);
+            player->message = DEH_String(GOTARCHVILETRAP);
+            sound = sfx_vilsit;
+            break;
+        case 65901: // Revenant Trap
+            if (gamemode != commercial)
+                return false;
+            ActivateSpawnTrap(doom_type);
+            player->message = DEH_String(GOTREVENANTTRAP);
+            sound = sfx_skesit;
+            break;
+        case 65902: // Lost Soul Trap
+            ActivateSpawnTrap(doom_type);
+            player->message = DEH_String(GOTLOSTSOULTRAP);
+            sound = sfx_sklatk;
             break;
 
         // Things not usually present in random pool, but can be !getitem-ed or bought
